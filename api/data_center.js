@@ -2,6 +2,45 @@ let faker = require('faker');
 
 let generateWorkers = () => {
 
+  // ---------- Realtime Start
+
+  let realtimeWrapper = [
+    {
+      name: '활성 캠페인 수',
+      currentValue: 3
+    },
+    {
+      name: '지출 금액',
+      currentValue: 100240,
+      unitType: 'won',
+      comparison: {
+        status: 'DOWN',
+        value: '전일 대비 5%'
+      }
+    },
+    {
+      name: 'CTR',
+      currentValue: 2.3,
+      unitType: 'percent',
+      comparison: {
+        status: 'UP',
+        value: '전일 대비 5%'
+      }
+    },
+    {
+      name: 'CPM',
+      currentValue: 3240,
+      unitType: 'won',
+      comparison: {
+        status: 'DOWN',
+        value: '전일 대비 5%'
+      }
+    }
+
+  ];
+
+  // ---------- Realtime END
+
   // ---------- SelectBox Start
   let selectBoxWrapper = [];
   for (let i = 0; i < 5; i++) {
@@ -94,11 +133,56 @@ let generateWorkers = () => {
   }
   // ---------- Bar Single Data END
 
+  // ---------- Bar Group Data Start
+
+  let barGroupWrapper = [];
+  for (let i = 0; i < 7; i++) {
+    let series = [];
+    let categories = ['~18', '18~24', '25~34', '35~44', '45~54', '55+'];
+
+    for (let g = 0; g < 2; g++) {
+      let data = [];
+      for (let j = 0; j < 6; j++) {
+        data.push(faker.random.number({min: 100, max: 500}));
+      }
+      series.push({
+        data: data
+      });
+    }
+
+    barGroupWrapper.push({
+      title: function() {
+        switch(i) {
+          case 0:
+            return '성별/연령별 광고 클릭 비중';
+          case 1:
+            return '성별/연령별 CPM';
+          case 2:
+            return '성별/연령별 CPC';
+          case 3:
+            return '성별/연령별 CTR';
+          case 4:
+            return '성별/연령별 CPV';
+          case 5:
+            return '성별/연령별 CPE';
+          case 6:
+            return '성별/연령별 CPI';
+          default:
+            return 'ERROR'
+        }
+      }(),
+      series: series,
+      categories: categories
+    })
+  }
+
 
   return {
     "lineSingle": lineSingleData,
     "barSingle": barSingleWrapper,
-    "selectBox": selectBoxWrapper
+    "barGroup": barGroupWrapper,
+    "selectBox": selectBoxWrapper,
+    "realTime": realtimeWrapper,
   }
 };
 module.exports = generateWorkers;
